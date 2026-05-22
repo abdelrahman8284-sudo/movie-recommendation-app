@@ -1,11 +1,16 @@
 package com.movie.backend.entity;
 
+import java.time.LocalDateTime;
+
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.movie.backend.enums.Role;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
@@ -23,6 +28,7 @@ import lombok.Setter;
 @Entity
 @Table(name="users")
 @AllArgsConstructor@NoArgsConstructor@Setter@Getter
+@EntityListeners(AuditingEntityListener.class)
 public class User {
 
 	@Id
@@ -39,9 +45,11 @@ public class User {
 	@Column(unique = true,nullable = false)
 	private String email;
 	@NotBlank
-	@Size(min = 6, max = 10)
+	@Size(min = 6,message="Password must be at least 6 characters")
 	private String password;
 	@Enumerated(EnumType.STRING)
-	@ColumnDefault("ROLE_USER")
+	@ColumnDefault("'ROLE_USER'")
 	private Role role;
+	@CreatedDate
+	private LocalDateTime createdAt;
 }
